@@ -5,11 +5,14 @@
 ## out of the cache
 
 ## makeCacheMatrix() makes a list of functions that verifies if the 
-## matrix has been used previously
+## matrix has been previously inverted
 
 makeCacheMatrix <- function(x = matrix()) {
-		m <- NULL
-        set <- function(y) {
+        m <- NULL                                       
+        ## assign NULL value to m; m is the variable that will be used by cacheSolve()
+        ## to evaluate the matrix "x" has been already inverted
+        
+        set <- function(y) {                            
                 x <<- y
                 m <<- NULL
         }
@@ -22,18 +25,31 @@ makeCacheMatrix <- function(x = matrix()) {
 }
 
 
-## cashSolve() uses MakeCacheMatrix to check if a matrix was
-## used previously. If it wasn't, then the funcion inverts the matrix
+## cashSolve() uses makeCacheMatrix to check if a matrix was
+## used previously. If it wasn't, then the funcion inverts the matrix.
+## Otherwise it displays the message "getting cached data" and the result (that was
+## previously calculated).
 
 cacheSolve <- function(x, ...) {
         ## Return a matrix that is the inverse of 'x'
-        m <- x$getsolve()
-        if(!is.null(m)) {
+        
+        m <- x$getsolve()       ## Assigns to m in the function's envenronment the value of m
+                                ## stored in the global environment
+        
+        if(!is.null(m)) {       ## if the value assigned to m by x$getsolve() is NOT NULL,
+                                ## then the inversion was previously done, and then cacheSolve()
+                                ## returns the value cached in m
+                
                 message("getting cached data")
                 return(m)
         }
-        data <- x$get()
-        m <- solve(data, ...)
-        x$setsolve(m)
-        m
+        data <- x$get()         ## Assigns the value of the matrix to data
+        
+        m <- solve(data, ...)   ## Inverts the matrix x and assigns the result do m in the 
+                                ## environment of cacheSolve()
+        
+        x$setsolve(m)           ## Assigns m in the environment of makeCashMatrix() 
+                                ## with the result of the inversion
+        
+        m                       ## Prints the result
 }
